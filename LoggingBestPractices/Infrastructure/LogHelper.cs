@@ -1,7 +1,7 @@
 ﻿using Collector.Serilog.Enrichers.Assembly;
 using Serilog;
 
-namespace LoggingBestPractices;
+namespace LoggingBestPractices.Infrastructure;
 
 public static class LogHelper
 {

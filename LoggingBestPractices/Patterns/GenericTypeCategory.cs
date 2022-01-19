@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace LoggingBestPractices;
+namespace LoggingBestPractices.Patterns;
 
 public class GenericTypeCategory
 {

@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LoggingBestPractices.Infrastructure.LogEvents;
+using Microsoft.Extensions.Logging;
 
-namespace LoggingBestPractices;
+namespace LoggingBestPractices.Infrastructure;
 
 public static partial class LoggerExtensions
 {

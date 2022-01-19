@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace LoggingBestPractices;
+namespace LoggingBestPractices.Patterns;
 
 public class NullObjectPattern
 {

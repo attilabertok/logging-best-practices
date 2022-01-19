@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LoggingBestPractices.Infrastructure;
+using LoggingBestPractices.Infrastructure.LogEvents;
+using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace LoggingBestPractices;
+namespace LoggingBestPractices.Patterns;
 
 public class EventTypes
 {
@@ -37,28 +39,5 @@ public class EventTypes
                 _logger.LogEmailChange(userId, oldEmailAddress, newEmailAddress);
             }
         }
-    }
-}
-
-public static class AppLogIds
-{
-    public static EventId ChangeEmailAddressId { get; } = new EventId(17, nameof(ChangeEmailAddressId)[..^2]);
-}
-
-public class AppLogEvents
-{
-    public static AppLogEvent ChangeEmailAddressEvent { get; } = new AppLogEvent(AppLogIds.ChangeEmailAddressId, "User {UserId} updated email address from {OldEmailAddress} to {NewEmailAddress}");
-}
-
-public class AppLogEvent
-{
-    public EventId Id { get; }
-
-    public string? Message { get; }
-
-    public AppLogEvent(EventId id, string? message)
-    {
-        Id = id;
-        Message = message;
     }
 }

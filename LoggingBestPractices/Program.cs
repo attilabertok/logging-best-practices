@@ -3,6 +3,9 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
 using System.Diagnostics;
+using LoggingBestPractices.Infrastructure;
+using LoggingBestPractices.Patterns;
+using LoggerExtensions = LoggingBestPractices.Infrastructure.LoggerExtensions;
 
 const string logFilename = "app.log";
 const string seqServerUrl = @"http://localhost:5341/";
@@ -73,7 +76,7 @@ void LogCategory()
 
 void LogEventType()
 {
-    LoggingBestPractices.LoggerExtensions.Init();
+    LoggerExtensions.Init();
 
     var eventType = new EventTypes(logger, serilogLogger);
 
