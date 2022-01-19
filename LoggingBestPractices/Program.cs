@@ -1,5 +1,4 @@
-﻿using LoggingBestPractices;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Extensions.Logging;
 using System.Diagnostics;
@@ -29,6 +28,7 @@ LogWithContext();
 LogWithNullObjectPattern();
 LogCategory();
 LogEventType();
+LogAndRethrow();
 
 serilogLogger.Dispose();
 
@@ -83,4 +83,12 @@ void LogEventType()
     eventType.Log(Guid.NewGuid(), "old@email.com", "new@email.com");
 
     //eventType.TestPerformance(Guid.NewGuid(), "old@email.com", "new@email.com", 100);
+}
+
+void LogAndRethrow()
+{
+    var logAndRethrowAntipattern = new LogAndRethrowAntipattern(logger);
+
+    logAndRethrowAntipattern.LogAndRethrow();
+    logAndRethrowAntipattern.EvenWorse();
 }
