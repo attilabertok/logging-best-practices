@@ -29,6 +29,7 @@ LogWithNullObjectPattern();
 LogCategory();
 LogEventType();
 LogAndRethrow();
+LogSampled();
 
 serilogLogger.Dispose();
 
@@ -91,4 +92,12 @@ void LogAndRethrow()
 
     logAndRethrowAntipattern.LogAndRethrow();
     logAndRethrowAntipattern.EvenWorse();
+}
+
+void LogSampled()
+{
+    var logSampled = new Sampling(logger);
+
+    logSampled.LogCriticalPath();
+    logSampled.ProcessAndSample();
 }
