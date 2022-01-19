@@ -17,12 +17,15 @@ var serilogLogger = new LoggerConfiguration()
     .CreateLogger();
 
 var provider = new SerilogLoggerProvider(serilogLogger);
+var factory = new LoggerFactory(new[] {provider});
 var logger = provider.CreateLogger(nameof(Program));
 
 LogInterpolated();
 LogException();
 LogWithContext();
 LogWithNullObjectPattern();
+LogCategory();
+LogEventType();
 
 serilogLogger.Dispose();
 
@@ -59,4 +62,22 @@ void LogWithNullObjectPattern()
 
     nullObjectPattern1.Log("the logger was passed in");
     nullObjectPattern2.Log("no logger was passed in");
+}
+
+void LogCategory()
+{
+    var genericTypeCategory = new GenericTypeCategory(logger, factory.CreateLogger<GenericTypeCategory>());
+
+    genericTypeCategory.Log();
+}
+
+void LogEventType()
+{
+    LoggingBestPractices.LoggerExtensions.Init();
+
+    var eventType = new EventTypes(logger, serilogLogger);
+
+    eventType.Log(Guid.NewGuid(), "old@email.com", "new@email.com");
+
+    //eventType.TestPerformance(Guid.NewGuid(), "old@email.com", "new@email.com", 100);
 }
