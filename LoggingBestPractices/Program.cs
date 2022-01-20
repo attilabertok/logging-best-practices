@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Extensions.Logging;
 using System.Diagnostics;
 using LoggingBestPractices.Infrastructure;
+using LoggingBestPractices.Infrastructure.ThingService;
 using LoggingBestPractices.Patterns;
 using LoggerExtensions = LoggingBestPractices.Infrastructure.LoggerExtensions;
 
@@ -13,6 +14,7 @@ var path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileNam
 var logFullPath = Path.Combine(path, logFilename);
 
 var serilogLogger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
     .Enrich()
     .WriteTo.File(logFullPath)
     .WriteTo.Seq(seqServerUrl)
@@ -30,6 +32,7 @@ LogCategory();
 LogEventType();
 LogAndRethrow();
 LogSampled();
+LogWithDecorator();
 
 serilogLogger.Dispose();
 
@@ -100,4 +103,13 @@ void LogSampled()
 
     logSampled.LogCriticalPath();
     logSampled.ProcessAndSample();
+}
+
+void LogWithDecorator()
+{
+    var thingService = new ThingService();
+    var decoratedThingService = new LoggingThingService(thingService, serilogLogger);
+    var decoratorPattern = new DecoratorPattern(decoratedThingService);
+
+    decoratorPattern.ManipulateThings();
 }
