@@ -56,7 +56,7 @@ void LogWithContext()
 {
     var loggerScopes = new LoggerScopes(logger);
 
-    using (logger.BeginScope("this log is in an {Scope} scope", "external"))
+    using (logger.BeginScope("this log is in an {AmbientScope} scope", "external"))
     {
         loggerScopes.LogWithContext();
     }
