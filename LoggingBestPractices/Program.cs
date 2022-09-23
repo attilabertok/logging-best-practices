@@ -33,6 +33,7 @@ LogEventType();
 LogAndRethrow();
 LogSampled();
 LogWithDecorator();
+LogTimed();
 
 serilogLogger.Dispose();
 
@@ -73,7 +74,10 @@ void LogWithNullObjectPattern()
 
 void LogCategory()
 {
-    var genericTypeCategory = new GenericTypeCategory(logger, factory.CreateLogger<GenericTypeCategory>());
+    var genericTypeCategory = new GenericTypeCategory(
+        logger,
+        factory.CreateLogger<GenericTypeCategory>(),
+        factory.CreateLogger("this is a custom log category"));
 
     genericTypeCategory.Log();
 }
@@ -108,8 +112,15 @@ void LogSampled()
 void LogWithDecorator()
 {
     var thingService = new ThingService();
-    var decoratedThingService = new LoggingThingService(thingService, serilogLogger);
+    var decoratedThingService = new LoggingThingService(thingService, logger);
     var decoratorPattern = new DecoratorPattern(decoratedThingService);
 
     decoratorPattern.ManipulateThings();
+}
+
+void LogTimed()
+{
+    var performanceLog = new PerformanceLog(serilogLogger);
+
+    performanceLog.Log();
 }

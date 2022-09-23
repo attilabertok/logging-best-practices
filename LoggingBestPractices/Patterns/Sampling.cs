@@ -35,7 +35,7 @@ public class Sampling
             // do thing here
             if (ShouldSample(i))
             {
-                using (_logger.BeginScope("item details {item}", new { Details = "this is an item" }))
+                using (_logger.BeginScope("item details {item}", new { Details = "this is an item", ItemId = Guid.NewGuid() }))
                 {
                     _logger.LogInformation("Processing {ItemCount}/{TotalCount} item", i, ItemCount);
                 }

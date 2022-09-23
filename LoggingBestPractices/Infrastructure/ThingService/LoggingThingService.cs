@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Microsoft.Extensions.Logging;
+
 using Serilog.Context;
 
 namespace LoggingBestPractices.Infrastructure.ThingService;
@@ -8,49 +9,61 @@ public class LoggingThingService : IThingService
     private readonly IThingService _thingServiceImplementation;
     private readonly ILogger _logger;
 
-    public LoggingThingService(IThingService thingServiceImplementation, ILogger serilogLogger)
+    public LoggingThingService(IThingService thingServiceImplementation, ILogger logger)
     {
         _thingServiceImplementation = thingServiceImplementation;
-        _logger = serilogLogger;
+        _logger = logger;
     }
 
     public int CountThings()
     {
-        _logger.Debug("Counting things");
+        _logger.LogDebug("Counting things");
         var result = _thingServiceImplementation.CountThings();
 
-        _logger.ForContext("Count", result)
-            .Debug("Counted things");
+        using (_logger.BeginScope(new Dictionary<string, object> { ["Count"] = result }))
+        {
+            _logger.LogDebug("Counted things");
+        }
 
         return result;
     }
 
     public void AddThing(string thingName)
     {
-        using (LogContext.PushProperty("ThingName", thingName))
+        using (_logger.BeginScope(new Dictionary<string, object> { ["ThingName"] = thingName}))
         {
-            _logger.Debug("Adding a new thing");
+            _logger.LogDebug("Adding a new thing");
             _thingServiceImplementation.AddThing(thingName);
-            _logger.Debug("Successfully added a new thing");
+            _logger.LogDebug("Successfully added a new thing");
         }
     }
 
     public void RemoveThing(string thingName)
     {
-        using (LogContext.PushProperty("ThingName", thingName))
+        using (_logger.BeginScope(CreateContext(thingName)))
         {
-            _logger.Debug("Removing a thing");
+            _logger.LogDebug("Removing a thing");
             try
             {
                 _thingServiceImplementation.RemoveThing(thingName);
-                _logger.Debug("Successfully removed a thing");
+                _logger.LogDebug("Successfully removed a thing");
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Failed to remove a thing");
+                _logger.LogError(e, "Failed to remove a thing");
 
                 // notice that there is no throw here
             }
         }
+    }
+
+    private static Dictionary<string, object> CreateContext(string thingName)
+    {
+        return new Dictionary<string, object>
+        {
+            ["CustomScopeSource"] = nameof(LoggingThingService),
+            ["CommonData"] = "Some common data",
+            ["ThingName"] = thingName
+        };
     }
 }
